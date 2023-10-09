@@ -40,9 +40,6 @@ function App() {
               return item.task!==taskItemToDelete
             }
         ))
-        const arrayJSON = JSON.stringify(todos);
-        localStorage.setItem('todos',arrayJSON)
-        toast.success('Remove successfully')
 }
   const handlechange=(e:ChangeEvent<HTMLInputElement>):void=>{
     if(e.target.name==="todo"){
