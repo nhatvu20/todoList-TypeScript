@@ -1,37 +1,106 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Itask } from "../Interfaces";
-
+import {toast } from "react-toastify";
 interface Props {
-  taskItem?: Itask;
-  completeTask(taskItemToDelete: string): void;
+  taskItem: Itask;
+  deleteTask: (id: number) => void;
+  modifyTodo(item: Itask, taskmodfy: string): void;
+  completeTodo(item: Itask): void;
 }
 
-const TodoTask = ({ taskItem, completeTask }: Props) => {
-  const [complete, setcomplete] = useState(false);
+const TodoTask = ({
+  taskItem,
+  deleteTask,
+  modifyTodo,
+  completeTodo,
+}: Props) => {
+  const [iscomplete, setiscomplete] = useState(taskItem.complete);
+  const [ismodify, setismodify] = useState(false);
+  const [taskmodfy, settaskmodfy] = useState("");
+  const inputMdf = useRef<HTMLInputElement>(null);
+  const handlechange = (e: any) => {
+    settaskmodfy(e.target.value);
+  };
+
+  const handlechangelecomplete=(e: any)=>{
+    setiscomplete(e.target.checked);
+  }
+  // if(ismodify){
+  //   inputMdf?.current?.focus()
+  // }
+  useEffect(() => {
+    inputMdf?.current?.focus();
+  }, [ismodify]);
   return (
-    <div className="flex ">
-      <span
-        className={`font-semibold bg-red-400 p-2 w-[300px] text-center cursor-pointer ${
-          complete && "line-through-full relative"
-        }`}
-        onClick={() => setcomplete((prev) => !prev)}
-      >
-        {taskItem?.task}
-      </span>
+    <div className="flex gap-2">
+      <input
+        type="checkbox"
+        className={` bg-green-400 w-[20px] text-center font-semibold cursor-pointer`}
+        onClick={() => {
+          setiscomplete((prev) => !prev);
+          completeTodo(taskItem);
+        }}
+        checked={taskItem.complete}
+        onChange={handlechangelecomplete}
+      />
+      {!ismodify ? (
+        <div>
+          <button
+            className={`font-semibold bg-red-400 p-2 w-[300px] text-center cursor-pointer ${
+              iscomplete && "line-through-full relative opacity-60"
+            }`}
+            onDoubleClick={() => {
+              setismodify(true);
+              settaskmodfy(taskItem.task);
+            }}
+          >
+            {taskItem?.task}
+          </button>
+          <button
+            className={`${taskItem.complete&&'cursor-not-allowed'} p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold`}
+            onClick={() => {
+              setismodify(true);
+              settaskmodfy(taskItem.task);
+            }}
+            disabled={taskItem.complete}
+            title={taskItem.complete?'you can only modify if task is not completed':''}
+          >
+            modify
+          </button>
+        </div>
+      ) : (
+        <div>
+          <input
+            type="text"
+            className={`outline-none font-semibold bg-red-400 p-2 w-[300px] text-center cursor-pointer }`}
+            ref={inputMdf}
+            value={taskmodfy}
+            onChange={handlechange}
+          />
+          <button
+            className="p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold"
+            onClick={() => {
+              if (taskmodfy.length > 0) {
+                modifyTodo(taskItem, taskmodfy);
+                setismodify(false);
+              } else {
+                toast.warn("Length of task > 0");
+              }
+            }}
+            title='Done Modify'
+          >
+            OK!
+          </button>
+        </div>
+      )}
       <button
         className="p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold"
-        onClick={() => completeTask(taskItem?.task || "")}
+        onClick={() => deleteTask(taskItem.id)}
+        title='Delete Task'
       >
-        X
-      </button>
-      <button
-        className={`p-2 bg-green-400 w-[100px] text-center font-semibold`}
-        onClick={() => setcomplete((prev) => !prev)}
-      >
-        V
+        delete
       </button>
     </div>
-    
   );
 };
 

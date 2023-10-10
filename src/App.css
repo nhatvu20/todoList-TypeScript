@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+button.line-through-full::before,
 span.line-through-full::before{
     content:'';
     display: block;
