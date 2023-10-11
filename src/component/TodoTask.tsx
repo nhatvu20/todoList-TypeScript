@@ -76,6 +76,14 @@ const TodoTask = ({
             ref={inputMdf}
             value={taskmodfy}
             onChange={handlechange}
+            onBlur={() => {
+              if (taskmodfy.length > 0) {
+                modifyTodo(taskItem, taskmodfy);
+                setismodify(false);
+              } else {
+                toast.warn("Length of task > 0");
+              }
+            }}
           />
           <button
             className="p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold"
