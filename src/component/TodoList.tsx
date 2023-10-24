@@ -9,7 +9,7 @@ function TodoList() {
 
   const handleAddtodo = (todo: string): void => {
     if (task.length > 0) {
-      const newTask = { id: Date.now(), task: task,complete:false};
+      const newTask = { id: Date.now(), task: task, complete: false };
       settodos([...todos, newTask]);
       setTask("");
       inputElement.current?.focus();
@@ -38,30 +38,34 @@ function TodoList() {
     );
   };
   //Modify function todo
-  const modifyTodo = (item: Itask,taskmodfy:string) => {
-    settodos(todos.map((taskItem) => {
-      if (taskItem.id === item.id) {
-        return {
-          ...taskItem,
-          task: taskmodfy,
-        };
-      }
-      return taskItem;
-    }));
+  const modifyTodo = (item: Itask, taskmodfy: string) => {
+    settodos(
+      todos.map((taskItem) => {
+        if (taskItem.id === item.id) {
+          return {
+            ...taskItem,
+            task: taskmodfy,
+          };
+        }
+        return taskItem;
+      })
+    );
     // console.log(todoupdate)
     inputElement.current?.focus();
   };
   //modify complete todo
   const completeTodo = (item: Itask) => {
-    settodos(todos.map((taskItem) => {
-      if (taskItem.id === item.id) {
-        return {
-          ...taskItem,
-          complete: !item.complete,
-        };
-      }
-      return taskItem;
-    }));
+    settodos(
+      todos.map((taskItem) => {
+        if (taskItem.id === item.id) {
+          return {
+            ...taskItem,
+            complete: !item.complete,
+          };
+        }
+        return taskItem;
+      })
+    );
     // console.log(todoupdate)
   };
 
@@ -77,9 +81,10 @@ function TodoList() {
         <div className="flex justify-center h-[30px] mt-7 gap-2">
           <input
             ref={inputElement}
+            maxLength={20}
             type="text"
             placeholder="Type todo"
-            className="p-2 h-max outline-none"
+            className="p-2 w-[250px] h-max outline-none text-center"
             name="todo"
             value={task}
             onChange={handlechange}

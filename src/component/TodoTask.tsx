@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Itask } from "../Interfaces";
-import {toast } from "react-toastify";
+import { toast } from "react-toastify";
 interface Props {
   taskItem: Itask;
   deleteTask: (id: number) => void;
@@ -22,9 +22,10 @@ const TodoTask = ({
     settaskmodfy(e.target.value);
   };
 
-  const handlechangelecomplete=(e: any)=>{
+  const handlechangelecomplete = (e: any) => {
+    console.log(taskItem.complete);
     setiscomplete(e.target.checked);
-  }
+  };
   // if(ismodify){
   //   inputMdf?.current?.focus()
   // }
@@ -39,12 +40,14 @@ const TodoTask = ({
         onClick={() => {
           setiscomplete((prev) => !prev);
           completeTodo(taskItem);
+          setismodify(false);
         }}
         checked={taskItem.complete}
-        onChange={handlechangelecomplete}
+        onChange={() => handlechangelecomplete}
       />
+      {/* ô input để nhập và sửa*/}
       {!ismodify ? (
-        <div>
+        <>
           <button
             className={`font-semibold bg-red-400 p-2 w-[300px] text-center cursor-pointer ${
               iscomplete && "line-through-full relative opacity-60"
@@ -55,24 +58,31 @@ const TodoTask = ({
             }}
           >
             {taskItem?.task}
-          </button>
+          </button>{" "}
           <button
-            className={`${taskItem.complete&&'cursor-not-allowed'} p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold`}
+            className={`${
+              iscomplete && "!cursor-not-allowed"
+            } p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold
+          // ${iscomplete ? "" : ""}`}
             onClick={() => {
               setismodify(true);
               settaskmodfy(taskItem.task);
             }}
-            disabled={taskItem.complete}
-            title={taskItem.complete?'you can only modify if task is not completed':''}
+            disabled={iscomplete}
+            title={
+              iscomplete ? "you can't only modify if task is not completed" : ""
+            }
           >
             modify
           </button>
-        </div>
+        </>
       ) : (
-        <div>
+        <>
           <input
             type="text"
-            className={`outline-none font-semibold bg-red-400 p-2 w-[300px] text-center cursor-pointer }`}
+            maxLength={20}
+            className={`outline-none font-semibold bg-red-400 p-2 w-[300px] text-center cursor-pointer 
+        ${iscomplete && "line-through-full relative opacity-60"}`}
             ref={inputMdf}
             value={taskmodfy}
             onChange={handlechange}
@@ -87,7 +97,93 @@ const TodoTask = ({
           />
           <button
             className="p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold"
+            // onClick={() => {
+            //   console.log(taskmodfy);
+            //   if (taskmodfy.length > 0) {
+            //     modifyTodo(taskItem, taskmodfy);
+            //     console.log(ismodify);
+            //     setismodify(false);
+            //   } else {
+            //     toast.warn("Length of task > 0");
+            //   }
+            // }}
+            title="Done Modify"
+          >
+            OK!
+          </button>
+        </>
+      )}
+      <div>
+        {/* <button
+          className={`font-semibold bg-red-400 p-2 w-[300px] text-center cursor-pointer ${
+            iscomplete && "line-through-full relative opacity-60"
+          }`}
+          onDoubleClick={() => {
+            setismodify(true);
+            settaskmodfy(taskItem.task);
+          }}
+        >
+          {taskItem?.task}
+        </button> */}
+        {/* <button
+          className={`${
+            iscomplete && "!cursor-not-allowed"
+          } p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold
+          // ${iscomplete ? "" : ""}`}
+          onClick={() => {
+            setismodify(true);
+            settaskmodfy(taskItem.task);
+          }}
+          disabled={iscomplete}
+          title={
+            iscomplete ? "you can only modify if task is not completed" : ""
+          }
+        >
+          modify
+        </button> */}
+      </div>
+
+      {!ismodify ? (
+        <div>
+          {/* <button
+            className={`font-semibold bg-red-400 p-2 w-[300px] text-center cursor-pointer ${
+              iscomplete && "line-through-full relative opacity-60"
+            }`}
+            onDoubleClick={() => {
+              setismodify(true);
+              settaskmodfy(taskItem.task);
+            }}
+          >
+            {taskItem?.task}
+          </button>
+          <button
+            className={`${
+              taskItem.complete && "cursor-not-allowed"
+            } p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold`}
             onClick={() => {
+              setismodify(true);
+              settaskmodfy(taskItem.task);
+            }}
+            disabled={taskItem.complete}
+            title={
+              taskItem.complete
+                ? "you can only modify if task is not completed"
+                : ""
+            }
+          >
+            modify
+          </button> */}
+        </div>
+      ) : (
+        <div>
+          {/* <input
+            type="text"
+            maxLength={20}
+            className={`outline-none font-semibold bg-red-400 p-2 w-[300px] text-center cursor-pointer }`}
+            ref={inputMdf}
+            value={taskmodfy}
+            onChange={handlechange}
+            onBlur={() => {
               if (taskmodfy.length > 0) {
                 modifyTodo(taskItem, taskmodfy);
                 setismodify(false);
@@ -95,16 +191,46 @@ const TodoTask = ({
                 toast.warn("Length of task > 0");
               }
             }}
-            title='Done Modify'
+          /> */}
+          {/* <button
+            className={`${
+              taskItem.complete && "cursor-not-allowed"
+            } p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold`}
+            onClick={() => {
+              setismodify(true);
+              settaskmodfy(taskItem.task);
+            }}
+            disabled={taskItem.complete}
+            title={
+              taskItem.complete
+                ? "you can only modify if task is not completed"
+                : ""
+            }
+          >
+            modify
+          </button> */}
+          {/* <button
+            className="p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold"
+            onClick={() => {
+              console.log(taskmodfy);
+              if (taskmodfy.length > 0) {
+                modifyTodo(taskItem, taskmodfy);
+                console.log(ismodify);
+                setismodify(false);
+              } else {
+                toast.warn("Length of task > 0");
+              }
+            }}
+            title="Done Modify"
           >
             OK!
-          </button>
+          </button> */}
         </div>
       )}
       <button
         className="p-2 bg-green-400 w-[100px] text-center border-white border-r-2 font-semibold"
         onClick={() => deleteTask(taskItem.id)}
-        title='Delete Task'
+        title="Delete Task"
       >
         delete
       </button>
